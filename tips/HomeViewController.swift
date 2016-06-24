@@ -75,6 +75,9 @@ class HomeViewController: UIViewController {
             self.view.layoutIfNeeded()
             }, completion: nil)
         
+        amountTotalLabel.adjustsFontSizeToFitWidth = true
+        amountTotalLabel.minimumScaleFactor =  0.5
+        
         // load tipPercetages
         var tipPercentages = defaultTipPercentages
         if defaults.objectForKey("tipPercentages") != nil {
@@ -124,20 +127,30 @@ class HomeViewController: UIViewController {
             tipPercentages = [Int(settingsTipPercentages[0])!, Int(settingsTipPercentages[1])!, Int(settingsTipPercentages[2])!]
         }
         let tipPercent = tipPercentages[tipPercentControl.selectedSegmentIndex]
-        let billAmount = NSString(string: billField.text!).doubleValue
+        let billAmount = self.stringToDouble(self.billField.text!)
         let tip : Double = billAmount * Double(tipPercent) / 100
         let total = billAmount + tip
         
-        amountTipLabel.text = formatThousandNumber(tip)
-        amountTotalLabel.text = formatThousandNumber(total)
-        let s = formatThousandNumber(billAmount)
-        print(s)
+        amountTipLabel.text = formatCurrency(tip)
+        amountTotalLabel.text = formatCurrency(total)
         billField.text = formatThousandNumber(billAmount)
-        print(billField.text)
+    }
+    
+    private func stringToDouble(string:String) -> Double{
+        let s = string.stringByReplacingOccurrencesOfString(",", withString: "")
+        formatter.groupingSeparator = " "
+        formatter.numberStyle = NSNumberFormatterStyle.DecimalStyle
+        let result = formatter.numberFromString(s)
+        
+        if (result?.doubleValue == nil) {
+            return 0
+        } else {
+            return (result?.doubleValue)!
+        }
     }
     
     private func formatThousandNumber(inputNumber: Double) -> String?{
-        formatter.groupingSeparator = " "
+        formatter.groupingSeparator = ","
         formatter.numberStyle = NSNumberFormatterStyle.DecimalStyle
         let result = formatter.stringFromNumber(inputNumber)
         return result
@@ -146,7 +159,7 @@ class HomeViewController: UIViewController {
     private func formatCurrency(inputNumber: Double) -> String?{
         formatter.numberStyle = NSNumberFormatterStyle.CurrencyStyle
         formatter.locale = NSLocale.currentLocale()
-        //formatter.maximumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
         let result = formatter.stringFromNumber(inputNumber)
         return result
     }

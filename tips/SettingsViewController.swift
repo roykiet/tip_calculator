@@ -79,11 +79,10 @@ class SettingsViewController: UIViewController {
             }, completion: nil)
 
         // load settings
-        let settingsTipPercentages = defaults.objectForKey("tipPercentages") as? [Int]
-        
         var tipPercentages = defaultTipPercentages
-        if settingsTipPercentages != nil {
-            tipPercentages = settingsTipPercentages!
+        if defaults.objectForKey("tipPercentages") != nil {
+            let settingsTipPercentages : [String] = (defaults.objectForKey("tipPercentages") as? [String]!)!
+            tipPercentages = [Int(settingsTipPercentages[0])!, Int(settingsTipPercentages[1])!, Int(settingsTipPercentages[2])!]
         }
         tipPercentage1Field.text = "\(tipPercentages[0])"
         tipPercentage2Field.text = "\(tipPercentages[1])"
