@@ -23,7 +23,7 @@ The following **optional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-![Video Walkthrough](http://i.imgur.com/mSyC1Yt.gifv)
+![Video Walkthrough](walkthrough.gif)
 
 ## Notes
 
